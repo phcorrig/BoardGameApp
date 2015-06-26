@@ -1,41 +1,93 @@
 package com.patrickcorriganjr.boardgameapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.SimpleCursorAdapter;
 
-import com.melnykov.fab.FloatingActionButton;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by Bag Boy Rebel on 6/14/2015.
  */
 public class GameEditFragment extends Fragment {
 
-    EditText mName;
-    EditText mMinPlayers;
-    EditText mMaxPlayers;
-    EditText mIdealPlayers;
-    EditText mGameLength;
-    EditText mRating;
-    EditText mTimesPlayed;
-    EditText mWhenBought;
-    EditText mDifficulty;
+    public static final String TAG = GameEditFragment.class.getSimpleName();
 
-    Button mSubmitButton;
-
-    /**
+        /**
      * The fragment argument representing the section number for this
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+    @InjectView(R.id.nameEditText)
+    EditText nameEditText;
+    @InjectView(R.id.imageView)
+    ImageView imageView;
+    @InjectView(R.id.minPlayersEditText)
+    EditText minPlayersEditText;
+    @InjectView(R.id.maxPlayersEditText)
+    EditText maxPlayersEditText;
+    @InjectView(R.id.idealPlayersEditText)
+    EditText idealPlayersEditText;
+    @InjectView(R.id.gameLengthEditText)
+    EditText gameLengthEditText;
+    @InjectView(R.id.ratingEditText)
+    EditText ratingEditText;
+    @InjectView(R.id.timesPlayedEditText)
+    EditText timesPlayedEditText;
+    @InjectView(R.id.whenBoughtEditText)
+    EditText whenBoughtEditText;
+    @InjectView(R.id.difficultyEditText)
+    EditText difficultyEditText;
+    @InjectView(R.id.submitButton)
+    Button submitButton;
+
+    @OnClick (R.id.submitButton)
+    void submit(){
+        GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
+
+        dbHelper.insertEntry(nameEditText.getText().toString(),
+                null,
+                minPlayersEditText.getText().toString(),
+                maxPlayersEditText.getText().toString(),
+                idealPlayersEditText.getText().toString(),
+                null,
+                gameLengthEditText.getText().toString(),
+                ratingEditText.getText().toString(),
+                timesPlayedEditText.getText().toString(),
+                whenBoughtEditText.getText().toString(),
+                difficultyEditText.getText().toString());
+    }
+
+    @OnClick (R.id.imageView)
+    void selectPhoto(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setItems(R.array.camera_choices, mDialogListener);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -57,37 +109,6 @@ public class GameEditFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_edit, container, false);
 
-        mName = (EditText)rootView.findViewById(R.id.nameEditText);
-        mMinPlayers = (EditText)rootView.findViewById(R.id.minPlayersEditText);
-        mMaxPlayers = (EditText)rootView.findViewById(R.id.maxPlayersEditText);
-        mIdealPlayers = (EditText)rootView.findViewById(R.id.idealPlayersEditText);
-        mGameLength = (EditText)rootView.findViewById(R.id.gameLengthEditText);
-        mRating = (EditText)rootView.findViewById(R.id.ratingEditText);
-        mTimesPlayed = (EditText)rootView.findViewById(R.id.timesPlayedEditText);
-        mWhenBought = (EditText)rootView.findViewById(R.id.whenBoughtEditText);
-        mDifficulty = (EditText)rootView.findViewById(R.id.difficultyEditText);
-
-        mSubmitButton = (Button)rootView.findViewById(R.id.submitButton);
-        mSubmitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
-
-                dbHelper.insertEntry(mName.getText().toString(),
-                        null,
-                        mMinPlayers.getText().toString(),
-                        mMaxPlayers.getText().toString(),
-                        mIdealPlayers.getText().toString(),
-                        null,
-                        mGameLength.getText().toString(),
-                        mRating.getText().toString(),
-                        mTimesPlayed.getText().toString(),
-                        mWhenBought.getText().toString(),
-                        mDifficulty.getText().toString());
-
-            }
-        });
-
         GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
 
         //dbHelper.insertEntry("Name2", null, 1, 4, 4, 0, 60, 5, 1, null, null);
@@ -96,9 +117,10 @@ public class GameEditFragment extends Fragment {
         SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(getActivity(),
                 android.R.layout.simple_list_item_2,
                 cursor,
-                new String[] { DBContract.GamesTable.COLUMN_NAME_NAME,  DBContract.GamesTable.COLUMN_NAME_RATING},
-                new int[] {android.R.id.text1, android.R.id.text2});
+                new String[]{DBContract.GamesTable.COLUMN_NAME_NAME, DBContract.GamesTable.COLUMN_NAME_RATING},
+                new int[]{android.R.id.text1, android.R.id.text2});
 
+        ButterKnife.inject(this, rootView);
         return rootView;
     }
 
@@ -110,4 +132,69 @@ public class GameEditFragment extends Fragment {
     }
 
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    public final int REQUEST_IMAGE_SELECT = 2;
+
+    protected DialogInterface.OnClickListener mDialogListener =
+        new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch(which) {
+                    case 0: // Take picture
+                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                            // Create the File where the photo should go
+                            File photoFile = null;
+                            try {
+                                photoFile = createImageFile();
+                            } catch (IOException ex) {
+                                // Error occurred while creating the File
+                                Log.e(TAG, "Exception: " + ex);
+                            }
+                            // Continue only if the File was successfully created
+                            if (photoFile != null) {
+                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                        Uri.fromFile(photoFile));
+                                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
+                                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                                File f = new File(mCurrentPhotoPath);
+                                Uri contentUri = Uri.fromFile(f);
+                                imageView.setImageURI(contentUri);
+                            }
+                        }
+                        break;
+                    case 1: // Choose picture
+                        Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                        choosePhotoIntent.setType("image/*");
+                        startActivityForResult(choosePhotoIntent, REQUEST_IMAGE_SELECT);
+                        break;
+                }
+            }
+        };
+
+    String mCurrentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                getActivity().getExternalFilesDir(null)      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
 }

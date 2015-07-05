@@ -74,7 +74,7 @@ public class GameEditFragment extends Fragment {
         GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
 
         dbHelper.insertEntry(nameEditText.getText().toString(),
-                null,
+                mCurrentPhotoPath2,
                 minPlayersEditText.getText().toString(),
                 maxPlayersEditText.getText().toString(),
                 idealPlayersEditText.getText().toString(),

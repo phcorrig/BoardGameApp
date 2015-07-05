@@ -74,7 +74,8 @@ public class GameListFragment extends Fragment {
                 new String[] { DBContract.GamesTable.COLUMN_NAME_NAME,  DBContract.GamesTable.COLUMN_NAME_RATING},
                 new int[] {android.R.id.text1, android.R.id.text2});
 
-        mListView.setAdapter(simpleCursorAdapter);
+        GameListAdapter adapter = new GameListAdapter(getActivity(), cursor);
+        mListView.setAdapter(adapter);
 
         return rootView;
     }

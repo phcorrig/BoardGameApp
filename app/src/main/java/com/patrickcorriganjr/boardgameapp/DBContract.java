@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
  */
 public final class DBContract {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "games.db";
     private static final String TEXT_TYPE          = " TEXT";
     private static final String BLOB_TYPE          = " BLOB";
@@ -36,7 +36,7 @@ public final class DBContract {
                 TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
-                COLUMN_NAME_PICTURE + BLOB_TYPE + COMMA_SEP +
+                COLUMN_NAME_PICTURE + TEXT_TYPE + COMMA_SEP +
                 COLUMN_NAME_MIN_PLAYERS + INT_TYPE + COMMA_SEP +
                 COLUMN_NAME_MAX_PLAYERS + INT_TYPE + COMMA_SEP +
                 COLUMN_NAME_IDEAL_PLAYERS + INT_TYPE + COMMA_SEP +

@@ -48,7 +48,8 @@ public class GameListAdapter extends CursorAdapter {
         imageView = (ImageView) view.findViewById(R.id.listItemImageView);
         titleTextView = (TextView) view.findViewById(R.id.listItemTitleTextView);
 
-        setPic();
+        if(mCurrentPhotoPath != null)
+            setPic();
         titleTextView.setText(title);
     }
 

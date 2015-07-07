@@ -114,26 +114,60 @@ public class GameEditFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_edit, container, false);
 
-        GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
-
-        //dbHelper.insertEntry("Name2", null, 1, 4, 4, 0, 60, 5, 1, null, null);
-        Cursor cursor = dbHelper.getAllEntries();
-
-        SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(getActivity(),
-                android.R.layout.simple_list_item_2,
-                cursor,
-                new String[]{DBContract.GamesTable.COLUMN_NAME_NAME, DBContract.GamesTable.COLUMN_NAME_RATING},
-                new int[]{android.R.id.text1, android.R.id.text2});
-
         ButterKnife.inject(this, rootView);
+
+        int index = getArguments().getInt(ARG_SECTION_NUMBER);
+        if(index > 0) {
+            GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
+            Cursor cursor = dbHelper.getAllEntries();
+            cursor.moveToPosition(index);
+
+            nameEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_NAME)));
+            mCurrentPhotoPath2 = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PICTURE));
+            mCurrentPhotoPath = "file:" + mCurrentPhotoPath2;
+            minPlayersEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_MIN_PLAYERS)));
+            maxPlayersEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_MAX_PLAYERS)));
+            idealPlayersEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_IDEAL_PLAYERS)));
+            // Category
+            gameLengthEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PLAY_TIME)));
+            ratingEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_RATING)));
+            timesPlayedEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_TIMES_PLAYED)));
+            whenBoughtEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PURCHASE_DATE)));
+            difficultyEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_DIFFICULTY)));
+
+            if(mCurrentPhotoPath2 != null) {
+                setPic();
+            }
+        }
+
         return rootView;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(
-                getArguments().getInt(ARG_SECTION_NUMBER));
+        /*((MainActivity) activity).onSectionAttached(
+                getArguments().getInt(ARG_SECTION_NUMBER));*/
+       /* int index = getArguments().getInt(ARG_SECTION_NUMBER);
+        index = 1;
+        if(index > 0) {
+            GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
+            Cursor cursor = dbHelper.getAllEntries();
+            cursor.moveToFirst();
+            //cursor.moveToPosition(index);
+
+            nameEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_NAME)));
+            mCurrentPhotoPath2 = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PICTURE));
+            minPlayersEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_MIN_PLAYERS)));
+            maxPlayersEditText.setText(cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_MAX_PLAYERS)));
+            idealPlayersEditText.setText(cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_IDEAL_PLAYERS)));
+            // Category
+            gameLengthEditText.setText(cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PLAY_TIME)));
+            ratingEditText.setText(cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_RATING)));
+            timesPlayedEditText.setText(cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_TIMES_PLAYED)));
+            whenBoughtEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PURCHASE_DATE)));
+            difficultyEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_DIFFICULTY)));
+        }*/
     }
 
 
@@ -263,7 +297,10 @@ public class GameEditFragment extends Fragment {
         int photoH = bmOptions.outHeight;
 
         // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+        int scaleFactor = 1;
+        if(targetH > 0 && targetW > 0) {
+            scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+        }
 
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;

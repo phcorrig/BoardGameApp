@@ -53,6 +53,8 @@ public class GameListAdapter extends CursorAdapter {
         titleTextView.setText(title);
     }
 
+
+
     private void setPic() {
         // Get the dimensions of the View
         int targetW = imageView.getWidth();

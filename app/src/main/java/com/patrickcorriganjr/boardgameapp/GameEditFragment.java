@@ -119,8 +119,7 @@ public class GameEditFragment extends Fragment {
         int index = getArguments().getInt(ARG_SECTION_NUMBER);
         if(index > 0) {
             GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
-            Cursor cursor = dbHelper.getAllEntries();
-            cursor.moveToPosition(index);
+            Cursor cursor = dbHelper.getEntry(index);
 
             nameEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_NAME)));
             mCurrentPhotoPath2 = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PICTURE));
@@ -146,28 +145,6 @@ public class GameEditFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        /*((MainActivity) activity).onSectionAttached(
-                getArguments().getInt(ARG_SECTION_NUMBER));*/
-       /* int index = getArguments().getInt(ARG_SECTION_NUMBER);
-        index = 1;
-        if(index > 0) {
-            GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
-            Cursor cursor = dbHelper.getAllEntries();
-            cursor.moveToFirst();
-            //cursor.moveToPosition(index);
-
-            nameEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_NAME)));
-            mCurrentPhotoPath2 = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PICTURE));
-            minPlayersEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_MIN_PLAYERS)));
-            maxPlayersEditText.setText(cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_MAX_PLAYERS)));
-            idealPlayersEditText.setText(cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_IDEAL_PLAYERS)));
-            // Category
-            gameLengthEditText.setText(cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PLAY_TIME)));
-            ratingEditText.setText(cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_RATING)));
-            timesPlayedEditText.setText(cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_TIMES_PLAYED)));
-            whenBoughtEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PURCHASE_DATE)));
-            difficultyEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_DIFFICULTY)));
-        }*/
     }
 
 
@@ -187,28 +164,6 @@ public class GameEditFragment extends Fragment {
                 switch(which) {
                     case 0: // Take picture
                         dispatchTakePictureIntent();
-                        /*Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                            // Create the File where the photo should go
-                            File photoFile = null;
-                            try {
-                                photoFile = createImageFile();
-                            } catch (IOException ex) {
-                                // Error occurred while creating the File
-                                Log.e(TAG, "Exception: " + ex);
-                            }
-                            // Continue only if the File was successfully created
-                            if (photoFile != null) {
-                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                        Uri.fromFile(photoFile));
-                                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-
-                                /*Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                                File f = new File(mCurrentPhotoPath);
-                                Uri contentUri = Uri.fromFile(f);
-                                imageView.setImageURI(contentUri);/
-                            }
-                        }*/
                         break;
                     case 1: // Choose picture
                         Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -222,13 +177,6 @@ public class GameEditFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK) {
-            /*Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);*/
-            /*Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            File f = new File(mCurrentPhotoPath);
-            Uri contentUri = Uri.fromFile(f);
-            imageView.setImageURI(contentUri);*/
             setPic();
         }
     }

@@ -89,24 +89,39 @@ public class GamesDbHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public Cursor getAllNames(){
+    public Cursor getEntry(int id){
         SQLiteDatabase db = this.getReadableDatabase();
 
         String[] projection = {
+                DBContract.GamesTable._ID,
                 DBContract.GamesTable.COLUMN_NAME_NAME,
+                DBContract.GamesTable.COLUMN_NAME_PICTURE,
+                DBContract.GamesTable.COLUMN_NAME_MIN_PLAYERS,
+                DBContract.GamesTable.COLUMN_NAME_MAX_PLAYERS,
+                DBContract.GamesTable.COLUMN_NAME_IDEAL_PLAYERS,
+                DBContract.GamesTable.COLUMN_NAME_CATEGORY,
+                DBContract.GamesTable.COLUMN_NAME_PLAY_TIME,
+                DBContract.GamesTable.COLUMN_NAME_RATING,
+                DBContract.GamesTable.COLUMN_NAME_TIMES_PLAYED,
+                DBContract.GamesTable.COLUMN_NAME_PURCHASE_DATE,
+                DBContract.GamesTable.COLUMN_NAME_DIFFICULTY
         };
 
-        String sortOrder = DBContract.GamesTable.COLUMN_NAME_NAME + " Desc";
+        String whereClause = DBContract.GamesTable._ID + " =?";
+        String[] idArr = { String.valueOf(id) };
 
-        return db.query(
+        Cursor cursor = db.query(
                 DBContract.GamesTable.TABLE_NAME,
                 projection,
+                whereClause,
+                idArr,
                 null,
                 null,
-                null,
-                null,
-                sortOrder
+                null//sortOrder
         );
+        cursor.moveToFirst();
+
+        return cursor;
     }
 
     public void deleteEntry(int ID){

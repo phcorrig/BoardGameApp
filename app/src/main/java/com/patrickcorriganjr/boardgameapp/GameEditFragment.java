@@ -46,6 +46,9 @@ public class GameEditFragment extends Fragment {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
+
+    private String ID = null;
+
     @InjectView(R.id.nameEditText)
     EditText nameEditText;
     @InjectView(R.id.imageView)
@@ -73,17 +76,33 @@ public class GameEditFragment extends Fragment {
     void submit(){
         GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
 
-        dbHelper.insertEntry(nameEditText.getText().toString(),
-                mCurrentPhotoPath2,
-                minPlayersEditText.getText().toString(),
-                maxPlayersEditText.getText().toString(),
-                idealPlayersEditText.getText().toString(),
-                null,
-                gameLengthEditText.getText().toString(),
-                ratingEditText.getText().toString(),
-                timesPlayedEditText.getText().toString(),
-                whenBoughtEditText.getText().toString(),
-                difficultyEditText.getText().toString());
+        if(ID == null) {
+            dbHelper.insertEntry(nameEditText.getText().toString(),
+                    mCurrentPhotoPath2,
+                    minPlayersEditText.getText().toString(),
+                    maxPlayersEditText.getText().toString(),
+                    idealPlayersEditText.getText().toString(),
+                    null,
+                    gameLengthEditText.getText().toString(),
+                    ratingEditText.getText().toString(),
+                    timesPlayedEditText.getText().toString(),
+                    whenBoughtEditText.getText().toString(),
+                    difficultyEditText.getText().toString());
+        }
+        else{
+            dbHelper.updateEntry(ID,
+                    nameEditText.getText().toString(),
+                    mCurrentPhotoPath2,
+                    minPlayersEditText.getText().toString(),
+                    maxPlayersEditText.getText().toString(),
+                    idealPlayersEditText.getText().toString(),
+                    null,
+                    gameLengthEditText.getText().toString(),
+                    ratingEditText.getText().toString(),
+                    timesPlayedEditText.getText().toString(),
+                    whenBoughtEditText.getText().toString(),
+                    difficultyEditText.getText().toString());
+        }
     }
 
     @OnClick (R.id.imageView)
@@ -121,6 +140,7 @@ public class GameEditFragment extends Fragment {
             GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
             Cursor cursor = dbHelper.getEntry(index);
 
+            ID = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable._ID));
             nameEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_NAME)));
             mCurrentPhotoPath2 = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PICTURE));
             mCurrentPhotoPath = "file:" + mCurrentPhotoPath2;

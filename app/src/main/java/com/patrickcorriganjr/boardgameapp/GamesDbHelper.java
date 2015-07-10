@@ -134,12 +134,12 @@ public class GamesDbHelper extends SQLiteOpenHelper {
         db.delete(DBContract.GamesTable.TABLE_NAME, selection, selectionArgs);
     }
 
-    public void updateEntry(int ID, String name, Bitmap picture, int minPlayers, int maxPlayers, int idealPlayers, int category, int playTime, int rating, int timesPlayed, String purchaseDate, String difficulty){
+    public void updateEntry(String ID, String name, String picture, String minPlayers, String maxPlayers, String idealPlayers, String category, String playTime, String rating, String timesPlayed, String purchaseDate, String difficulty){
         SQLiteDatabase db = this.getReadableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(DBContract.GamesTable.COLUMN_NAME_NAME, name);
-        values.put(DBContract.GamesTable.COLUMN_NAME_PICTURE, getBitmapAsByteArray(picture));
+        values.put(DBContract.GamesTable.COLUMN_NAME_PICTURE, picture);
         values.put(DBContract.GamesTable.COLUMN_NAME_MIN_PLAYERS, minPlayers);
         values.put(DBContract.GamesTable.COLUMN_NAME_MAX_PLAYERS, maxPlayers);
         values.put(DBContract.GamesTable.COLUMN_NAME_IDEAL_PLAYERS, idealPlayers);

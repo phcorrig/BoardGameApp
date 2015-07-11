@@ -15,6 +15,9 @@ import android.widget.SimpleCursorAdapter;
 
 import com.melnykov.fab.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Bag Boy Rebel on 6/14/2015.
  */
@@ -23,6 +26,9 @@ public class GameListFragment extends Fragment {
     ListView mListView;
     FloatingActionButton mFab;
     GameListAdapter adapter;
+    GamesAdapter adapter2;
+
+    ArrayList<Game> gameList;
 
     /**
      * The fragment argument representing the section number for this
@@ -76,7 +82,9 @@ public class GameListFragment extends Fragment {
                 new int[] {android.R.id.text1, android.R.id.text2});
 
         adapter = new GameListAdapter(getActivity(), cursor);
-        mListView.setAdapter(adapter);
+        getGames();
+        adapter2 = new GamesAdapter(getActivity(), gameList);
+        mListView.setAdapter(adapter2);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -91,6 +99,8 @@ public class GameListFragment extends Fragment {
             }
         });
 
+
+
         return rootView;
     }
 
@@ -99,5 +109,31 @@ public class GameListFragment extends Fragment {
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
+    }
+
+    public void getGames(){
+        GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
+        gameList = new ArrayList<Game>();
+
+        Cursor cursor = dbHelper.getAllEntries();
+        cursor.moveToFirst();
+
+        while(cursor.moveToNext()){
+            int ID = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable._ID));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_NAME));
+            String currentPhotoPath2 = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PICTURE));
+            int minPlayers = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_MIN_PLAYERS));
+            int maxPlayers = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_MAX_PLAYERS));
+            int idealPlayers = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_IDEAL_PLAYERS));
+            // Category
+            int gameLength = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PLAY_TIME));
+            int rating = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_RATING));
+            int timesPlayed = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_TIMES_PLAYED));
+            String whenBought = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PURCHASE_DATE));
+            String difficulty = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_DIFFICULTY));
+
+            Game newGame = new Game(ID, name, currentPhotoPath2, minPlayers, maxPlayers, idealPlayers, gameLength, rating, timesPlayed, whenBought, difficulty);
+            gameList.add(newGame);
+        }
     }
 }

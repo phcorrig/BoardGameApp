@@ -39,7 +39,7 @@ public class GamesAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return mGamesList.get(i).getmID();
+        return mGamesList.get(i).getID();
     }
 
     @Override
@@ -59,8 +59,8 @@ public class GamesAdapter extends BaseAdapter {
         }
 
         Game game = mGamesList.get(i);
-        setPic(game.getmCurrentPhotoPath2(), holder.imageView);
-        holder.titleTextView.setText((game.getmName()));
+        setPic(game.getCurrentPhotoPath2(), holder.imageView);
+        holder.titleTextView.setText((game.getName()));
 
         return convertView;
     }

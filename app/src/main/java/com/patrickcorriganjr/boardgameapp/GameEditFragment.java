@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -45,9 +47,9 @@ public class GameEditFragment extends Fragment {
      * The fragment argument representing the section number for this
      * fragment.
      */
-    private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String ARG_PARCELABLE = "parcelable";
 
-    private String ID = null;
+    private int ID = -1;
 
     @InjectView(R.id.nameEditText)
     EditText nameEditText;
@@ -76,7 +78,7 @@ public class GameEditFragment extends Fragment {
     void submit(){
         GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
 
-        if(ID == null) {
+        if(ID == -1) {
             dbHelper.insertEntry(nameEditText.getText().toString(),
                     mCurrentPhotoPath2,
                     minPlayersEditText.getText().toString(),
@@ -90,7 +92,7 @@ public class GameEditFragment extends Fragment {
                     difficultyEditText.getText().toString());
         }
         else{
-            dbHelper.updateEntry(ID,
+            dbHelper.updateEntry("" + ID,
                     nameEditText.getText().toString(),
                     mCurrentPhotoPath2,
                     minPlayersEditText.getText().toString(),
@@ -103,6 +105,7 @@ public class GameEditFragment extends Fragment {
                     whenBoughtEditText.getText().toString(),
                     difficultyEditText.getText().toString());
         }
+        getFragmentManager().popBackStack();
     }
 
     @OnClick (R.id.imageView)
@@ -117,10 +120,10 @@ public class GameEditFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static GameEditFragment newInstance(int sectionNumber) {
+    public static GameEditFragment newInstance(Parcelable parcelable) {
         GameEditFragment fragment = new GameEditFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putParcelable(ARG_PARCELABLE, parcelable);
         fragment.setArguments(args);
         return fragment;
     }
@@ -135,24 +138,21 @@ public class GameEditFragment extends Fragment {
 
         ButterKnife.inject(this, rootView);
 
-        int index = getArguments().getInt(ARG_SECTION_NUMBER);
-        if(index > 0) {
-            GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
-            Cursor cursor = dbHelper.getEntry(index);
-
-            ID = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable._ID));
-            nameEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_NAME)));
-            mCurrentPhotoPath2 = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PICTURE));
+        Game game = getArguments().getParcelable(ARG_PARCELABLE);
+        if(game != null) {
+            ID = game.getID();
+            nameEditText.setText(game.getName());
+            mCurrentPhotoPath2 = game.getCurrentPhotoPath2();
             mCurrentPhotoPath = "file:" + mCurrentPhotoPath2;
-            minPlayersEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_MIN_PLAYERS)));
-            maxPlayersEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_MAX_PLAYERS)));
-            idealPlayersEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_IDEAL_PLAYERS)));
+            minPlayersEditText.setText(game.getMinPlayers() + "");
+            maxPlayersEditText.setText(game.getMaxPlayers() + "");
+            idealPlayersEditText.setText(game.getIdealPlayers() + "");
             // Category
-            gameLengthEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PLAY_TIME)));
-            ratingEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_RATING)));
-            timesPlayedEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_TIMES_PLAYED)));
-            whenBoughtEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PURCHASE_DATE)));
-            difficultyEditText.setText(cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_DIFFICULTY)));
+            gameLengthEditText.setText(game.getGameLength() + "");
+            ratingEditText.setText(game.getRating() + "");
+            timesPlayedEditText.setText(game.getTimesPlayed() + "");
+            whenBoughtEditText.setText(game.getWhenBought());
+            difficultyEditText.setText(game.getDifficulty());
 
             if(mCurrentPhotoPath2 != null) {
                 setPic();

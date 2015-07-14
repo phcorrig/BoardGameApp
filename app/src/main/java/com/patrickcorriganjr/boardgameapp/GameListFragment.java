@@ -3,20 +3,20 @@ package com.patrickcorriganjr.boardgameapp;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Bag Boy Rebel on 6/14/2015.
@@ -25,7 +25,6 @@ public class GameListFragment extends Fragment {
 
     ListView mListView;
     FloatingActionButton mFab;
-    GameListAdapter adapter;
     GamesAdapter adapter2;
 
     ArrayList<Game> gameList;
@@ -62,7 +61,7 @@ public class GameListFragment extends Fragment {
             public void onClick(View view) {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, GameEditFragment.newInstance(0)).addToBackStack("tag")
+                        .replace(R.id.container, GameEditFragment.newInstance(null)).addToBackStack("tag")
                         .commit();
             }
         });
@@ -75,26 +74,17 @@ public class GameListFragment extends Fragment {
 
         Cursor cursor = dbHelper.getAllEntries();
 
-        SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(getActivity(),
-                android.R.layout.simple_list_item_2,
-                cursor,
-                new String[] { DBContract.GamesTable.COLUMN_NAME_NAME,  DBContract.GamesTable.COLUMN_NAME_RATING},
-                new int[] {android.R.id.text1, android.R.id.text2});
-
-        adapter = new GameListAdapter(getActivity(), cursor);
         getGames();
         adapter2 = new GamesAdapter(getActivity(), gameList);
         mListView.setAdapter(adapter2);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Cursor cursor1 = (Cursor) adapter.getItem(i);
+                Game game = (Game) adapter2.getItem(i);
 
-                int testString = cursor1.getInt(cursor1.getColumnIndexOrThrow(DBContract.GamesTable._ID));
-                String title = cursor1.getString(cursor1.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_NAME));
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, GameEditFragment.newInstance(cursor1.getInt(cursor1.getColumnIndexOrThrow(DBContract.GamesTable._ID)))).addToBackStack("tag")
+                        .replace(R.id.container, GameEditFragment.newInstance(game)).addToBackStack("tag")
                         .commit();
             }
         });

@@ -1,4 +1,4 @@
-package com.patrickcorriganjr.boardgameapp;
+package com.patrickcorriganjr.boardgameapp.Data;
 
 import android.provider.BaseColumns;
 

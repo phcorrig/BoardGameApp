@@ -1,10 +1,8 @@
-package com.patrickcorriganjr.boardgameapp;
+package com.patrickcorriganjr.boardgameapp.UI;
 
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -12,9 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 import com.melnykov.fab.FloatingActionButton;
+import com.patrickcorriganjr.boardgameapp.Data.DBContract;
+import com.patrickcorriganjr.boardgameapp.Data.Game;
+import com.patrickcorriganjr.boardgameapp.Adapters.GamesAdapter;
+import com.patrickcorriganjr.boardgameapp.Data.GamesDbHelper;
+import com.patrickcorriganjr.boardgameapp.MainActivity;
+import com.patrickcorriganjr.boardgameapp.R;
 
 import java.util.ArrayList;
 
@@ -84,7 +87,7 @@ public class GameListFragment extends Fragment {
 
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, GameEditFragment.newInstance(game)).addToBackStack("tag")
+                        .replace(R.id.container, GameViewFragment.newInstance(game)).addToBackStack("tag")
                         .commit();
             }
         });

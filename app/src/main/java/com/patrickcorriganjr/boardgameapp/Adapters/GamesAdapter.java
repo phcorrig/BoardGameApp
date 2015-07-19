@@ -1,4 +1,4 @@
-package com.patrickcorriganjr.boardgameapp;
+package com.patrickcorriganjr.boardgameapp.Adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.patrickcorriganjr.boardgameapp.Data.Game;
+import com.patrickcorriganjr.boardgameapp.R;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

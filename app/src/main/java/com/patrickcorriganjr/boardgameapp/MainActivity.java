@@ -8,6 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 
+import com.patrickcorriganjr.boardgameapp.UI.GameListFragment;
+import com.patrickcorriganjr.boardgameapp.UI.NavigationDrawerFragment;
+
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {

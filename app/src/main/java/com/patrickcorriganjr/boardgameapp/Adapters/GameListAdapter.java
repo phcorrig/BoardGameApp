@@ -1,4 +1,4 @@
-package com.patrickcorriganjr.boardgameapp;
+package com.patrickcorriganjr.boardgameapp.Adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.patrickcorriganjr.boardgameapp.Data.DBContract;
+import com.patrickcorriganjr.boardgameapp.R;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

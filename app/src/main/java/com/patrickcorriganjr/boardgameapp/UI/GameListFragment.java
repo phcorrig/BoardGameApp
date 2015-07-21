@@ -42,11 +42,11 @@ public class GameListFragment extends Fragment {
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static GameListFragment newInstance(int sectionNumber) {
+    public static GameListFragment newInstance(){//int sectionNumber) {
         GameListFragment fragment = new GameListFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
+        //Bundle args = new Bundle();
+        //args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        //fragment.setArguments(args);
         return fragment;
     }
 
@@ -95,13 +95,6 @@ public class GameListFragment extends Fragment {
 
 
         return rootView;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(
-                getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
     public void getGames(){

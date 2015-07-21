@@ -12,8 +12,12 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -48,6 +52,8 @@ public class GameViewFragment extends Fragment {
      * fragment.
      */
     private static final String ARG_PARCELABLE = "parcelable";
+
+    private Game mGame = null;
 
     private int ID = -1;
 
@@ -92,23 +98,24 @@ public class GameViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_view, container, false);
 
+        setHasOptionsMenu(true);
         ButterKnife.inject(this, rootView);
 
-        Game game = getArguments().getParcelable(ARG_PARCELABLE);
-        if(game != null) {
-            ID = game.getID();
-            nameTextView.setText(game.getName());
-            mCurrentPhotoPath2 = game.getCurrentPhotoPath2();
+        mGame = getArguments().getParcelable(ARG_PARCELABLE);
+        if(mGame != null) {
+            ID = mGame.getID();
+            nameTextView.setText(mGame.getName());
+            mCurrentPhotoPath2 = mGame.getCurrentPhotoPath2();
             mCurrentPhotoPath = "file:" + mCurrentPhotoPath2;
-            minPlayersTextView.setText(game.getMinPlayers() + "");
-            maxPlayersTextView.setText(game.getMaxPlayers() + "");
-            idealPlayersTextView.setText(game.getIdealPlayers() + "");
+            minPlayersTextView.setText(mGame.getMinPlayers() + "");
+            maxPlayersTextView.setText(mGame.getMaxPlayers() + "");
+            idealPlayersTextView.setText(mGame.getIdealPlayers() + "");
             // Category
-            gameLengthTextView.setText(game.getGameLength() + "");
-            ratingTextView.setText(game.getRating() + "");
-            timesPlayedTextView.setText(game.getTimesPlayed() + "");
-            whenBoughtTextView.setText(game.getWhenBought());
-            difficultyTextView.setText(game.getDifficulty());
+            gameLengthTextView.setText(mGame.getGameLength() + "");
+            ratingTextView.setText(mGame.getRating() + "");
+            timesPlayedTextView.setText(mGame.getTimesPlayed() + "");
+            whenBoughtTextView.setText(mGame.getWhenBought());
+            difficultyTextView.setText(mGame.getDifficulty());
 
             if(mCurrentPhotoPath2 != null) {
                 setPic();
@@ -132,6 +139,31 @@ public class GameViewFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.game_view, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_edit) {
+            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, GameEditFragment.newInstance(mGame)).addToBackStack("tag")
+                    .commit();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     String mCurrentPhotoPath;

@@ -102,7 +102,7 @@ public class GameListFragment extends Fragment {
         gameList = new ArrayList<Game>();
 
         Cursor cursor = dbHelper.getAllEntries();
-        cursor.moveToFirst();
+        //cursor.moveToFirst();
 
         while(cursor.moveToNext()){
             int ID = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable._ID));

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.patrickcorriganjr.boardgameapp.Data.DBContract;
 import com.patrickcorriganjr.boardgameapp.Data.Game;
 import com.patrickcorriganjr.boardgameapp.Data.GamesDbHelper;
 import com.patrickcorriganjr.boardgameapp.R;
@@ -102,6 +104,8 @@ public class GameViewFragment extends Fragment {
         ButterKnife.inject(this, rootView);
 
         mGame = getArguments().getParcelable(ARG_PARCELABLE);
+
+        mGame = getGame(mGame.getID());
         if(mGame != null) {
             ID = mGame.getID();
             nameTextView.setText(mGame.getName());
@@ -202,5 +206,29 @@ public class GameViewFragment extends Fragment {
 
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath2, bmOptions);
         imageView.setImageBitmap(bitmap);
+    }
+
+    Game getGame(int pos){
+        GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
+
+        Cursor cursor = dbHelper.getAllEntries();
+        cursor.moveToFirst();
+
+        int ID = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable._ID));
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_NAME));
+        String currentPhotoPath2 = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PICTURE));
+        int minPlayers = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_MIN_PLAYERS));
+        int maxPlayers = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_MAX_PLAYERS));
+        int idealPlayers = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_IDEAL_PLAYERS));
+        // Category
+        int gameLength = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PLAY_TIME));
+        int rating = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_RATING));
+        int timesPlayed = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_TIMES_PLAYED));
+        String whenBought = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_PURCHASE_DATE));
+        String difficulty = cursor.getString(cursor.getColumnIndexOrThrow(DBContract.GamesTable.COLUMN_NAME_DIFFICULTY));
+
+        Game newGame = new Game(ID, name, currentPhotoPath2, minPlayers, maxPlayers, idealPlayers, gameLength, rating, timesPlayed, whenBought, difficulty);
+
+        return newGame;
     }
 }

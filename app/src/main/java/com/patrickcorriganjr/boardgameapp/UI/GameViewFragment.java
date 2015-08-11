@@ -211,7 +211,7 @@ public class GameViewFragment extends Fragment {
     Game getGame(int pos){
         GamesDbHelper dbHelper = new GamesDbHelper(getActivity());
 
-        Cursor cursor = dbHelper.getAllEntries();
+        Cursor cursor = dbHelper.getEntry(pos);
         cursor.moveToFirst();
 
         int ID = cursor.getInt(cursor.getColumnIndexOrThrow(DBContract.GamesTable._ID));

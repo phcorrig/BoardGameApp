@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -71,14 +72,14 @@ public class GameViewFragment extends Fragment {
     TextView idealPlayersTextView;
     @InjectView(R.id.gameLengthTextView)
     TextView gameLengthTextView;
-    @InjectView(R.id.ratingTextView)
-    TextView ratingTextView;
     @InjectView(R.id.timesPlayedTextView)
     TextView timesPlayedTextView;
     @InjectView(R.id.whenBoughtTextView)
     TextView whenBoughtTextView;
     @InjectView(R.id.difficultyTextView)
     TextView difficultyTextView;
+    @InjectView(R.id.ratingBar)
+    RatingBar ratingBar;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -111,12 +112,13 @@ public class GameViewFragment extends Fragment {
             nameTextView.setText(mGame.getName());
             mCurrentPhotoPath2 = mGame.getCurrentPhotoPath2();
             mCurrentPhotoPath = "file:" + mCurrentPhotoPath2;
+            //ratingBar.setRating(mGame.getRating());
             minPlayersTextView.setText(mGame.getMinPlayers() + "");
             maxPlayersTextView.setText(mGame.getMaxPlayers() + "");
             idealPlayersTextView.setText(mGame.getIdealPlayers() + "");
             // Category
             gameLengthTextView.setText(mGame.getGameLength() + "");
-            ratingTextView.setText(mGame.getRating() + "");
+            //ratingTextView.setText(mGame.getRating() + "");
             timesPlayedTextView.setText(mGame.getTimesPlayed() + "");
             whenBoughtTextView.setText(mGame.getWhenBought());
             difficultyTextView.setText(mGame.getDifficulty());
@@ -138,6 +140,14 @@ public class GameViewFragment extends Fragment {
         super.onAttach(activity);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(mGame != null) {
+            ratingBar.setRating(mGame.getRating());
+        }
+    }
 
     @Override
     public void onDestroyView() {

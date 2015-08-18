@@ -28,47 +28,101 @@
                 android:layout_height="254dp"
                 android:id="@+id/imageView2" />
 
-            <TextView
-                android:layout_width="match_parent"
+            <RatingBar
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/minPlayersTextView"
-                android:inputType="number"
-                android:textSize="20sp"
-                android:hint="Min Players"/>
+                android:id="@+id/ratingBar"
+                android:layout_gravity="center_horizontal"
+                android:isIndicator="true" />
 
-            <TextView
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/maxPlayersTextView"
-                android:inputType="number"
-                android:textSize="20sp"
-                android:hint="Max Players"/>
+                android:layout_height="match_parent">
 
-            <TextView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:paddingRight="5dp"
+                    android:text="Players:" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/minPlayersTextView"
+                    android:textSize="20sp"
+                    android:hint="0"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="-" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/maxPlayersTextView"
+                    android:textSize="20sp"
+                    android:hint="0"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:paddingLeft="10dp"
+                    android:text="(" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textSize="20sp"
+                    android:id="@+id/idealPlayersTextView"
+                    android:hint="0"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:paddingRight="5dp"
+                    android:text=")" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textSize="20sp"
-                android:id="@+id/idealPlayersTextView"
-                android:hint="Ideal Players"/>
+                android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textSize="20sp"
-                android:id="@+id/gameLengthTextView"
-                android:hint="Game Length"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:paddingRight="5dp"
+                    android:text="Length:" />
 
-            <TextView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textSize="20sp"
+                    android:id="@+id/gameLengthTextView"
+                    android:hint="0"/>
+            </LinearLayout>
+
+            <!--<TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:textSize="20sp"
                 android:id="@+id/ratingTextView"
-                android:hint="Rating"/>
+                android:hint="Rating"/>-->
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
@@ -77,6 +131,7 @@
                 android:hint="Times Played"/>
 
             <TextView
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/whenBoughtTextView"

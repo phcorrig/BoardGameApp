@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.patrickcorriganjr.boardgameapp.Data.Game;
@@ -48,6 +49,8 @@ public class GameEditFragment extends Fragment {
      */
     private static final String ARG_PARCELABLE = "parcelable";
 
+    Game mGame;
+
     private int ID = -1;
 
     @InjectView(R.id.nameEditText)
@@ -72,6 +75,8 @@ public class GameEditFragment extends Fragment {
     EditText difficultyEditText;
     @InjectView(R.id.submitButton)
     Button submitButton;
+    @InjectView(R.id.ratingBarEdit)
+    RatingBar ratingBar;
 
     @OnClick (R.id.submitButton)
     void submit(){
@@ -85,7 +90,7 @@ public class GameEditFragment extends Fragment {
                     idealPlayersEditText.getText().toString(),
                     null,
                     gameLengthEditText.getText().toString(),
-                    ratingEditText.getText().toString(),
+                    ratingBar.getRating() + "",//ratingEditText.getText().toString(),
                     timesPlayedEditText.getText().toString(),
                     whenBoughtEditText.getText().toString(),
                     difficultyEditText.getText().toString());
@@ -99,7 +104,7 @@ public class GameEditFragment extends Fragment {
                     idealPlayersEditText.getText().toString(),
                     null,
                     gameLengthEditText.getText().toString(),
-                    ratingEditText.getText().toString(),
+                    ratingBar.getRating() + "",//ratingEditText.getText().toString(),
                     timesPlayedEditText.getText().toString(),
                     whenBoughtEditText.getText().toString(),
                     difficultyEditText.getText().toString());
@@ -137,21 +142,22 @@ public class GameEditFragment extends Fragment {
 
         ButterKnife.inject(this, rootView);
 
-        Game game = getArguments().getParcelable(ARG_PARCELABLE);
-        if(game != null) {
-            ID = game.getID();
-            nameEditText.setText(game.getName());
-            mCurrentPhotoPath2 = game.getCurrentPhotoPath2();
+        mGame = getArguments().getParcelable(ARG_PARCELABLE);
+        if(mGame != null) {
+            ID = mGame.getID();
+            nameEditText.setText(mGame.getName());
+            mCurrentPhotoPath2 = mGame.getCurrentPhotoPath2();
             mCurrentPhotoPath = "file:" + mCurrentPhotoPath2;
-            minPlayersEditText.setText(game.getMinPlayers() + "");
-            maxPlayersEditText.setText(game.getMaxPlayers() + "");
-            idealPlayersEditText.setText(game.getIdealPlayers() + "");
+            minPlayersEditText.setText(mGame.getMinPlayers() + "");
+            maxPlayersEditText.setText(mGame.getMaxPlayers() + "");
+            idealPlayersEditText.setText(mGame.getIdealPlayers() + "");
             // Category
-            gameLengthEditText.setText(game.getGameLength() + "");
-            ratingEditText.setText(game.getRating() + "");
-            timesPlayedEditText.setText(game.getTimesPlayed() + "");
-            whenBoughtEditText.setText(game.getWhenBought());
-            difficultyEditText.setText(game.getDifficulty());
+            gameLengthEditText.setText(mGame.getGameLength() + "");
+
+            ratingEditText.setText(mGame.getRating() + "");
+            timesPlayedEditText.setText(mGame.getTimesPlayed() + "");
+            whenBoughtEditText.setText(mGame.getWhenBought());
+            difficultyEditText.setText(mGame.getDifficulty());
 
             if(mCurrentPhotoPath2 != null) {
                 setPic();
@@ -166,6 +172,14 @@ public class GameEditFragment extends Fragment {
         super.onAttach(activity);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(mGame != null) {
+            ratingBar.setRating(mGame.getRating());
+        }
+    }
 
     @Override
     public void onDestroyView() {

@@ -11,7 +11,8 @@
     <ImageView
         android:layout_width="106dp"
         android:layout_height="80dp"
-        android:id="@+id/listItemImageView" />
+        android:id="@+id/listItemImageView"
+        android:src="@drawable/no_picture" />
 
     <TextView
         android:layout_width="fill_parent"

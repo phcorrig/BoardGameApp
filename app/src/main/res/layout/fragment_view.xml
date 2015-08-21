@@ -26,7 +26,8 @@
             <ImageView
                 android:layout_width="338dp"
                 android:layout_height="254dp"
-                android:id="@+id/imageView2" />
+                android:id="@+id/imageView2"
+                android:src="@drawable/no_picture" />
 
             <RatingBar
                 android:layout_width="wrap_content"
@@ -138,12 +139,26 @@
                 android:textSize="20sp"
                 android:hint="When Bought"/>
 
-            <TextView
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/difficultyTextView"
-                android:textSize="20sp"
-                android:hint="Difficulty"/>
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:paddingRight="5dp"
+                    android:text="Difficulty:" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/difficultyTextView"
+                    android:textSize="20sp"
+                    android:hint=""/>
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

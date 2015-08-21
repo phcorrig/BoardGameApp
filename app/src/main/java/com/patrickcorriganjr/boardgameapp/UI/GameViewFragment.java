@@ -121,7 +121,13 @@ public class GameViewFragment extends Fragment {
             //ratingTextView.setText(mGame.getRating() + "");
             timesPlayedTextView.setText(mGame.getTimesPlayed() + "");
             whenBoughtTextView.setText(mGame.getWhenBought());
-            difficultyTextView.setText(mGame.getDifficulty());
+            String[] stringArr = getResources().getStringArray(R.array.diffuculty_choices);
+            try {
+                difficultyTextView.setText(stringArr[Integer.parseInt(mGame.getDifficulty())]);//mGame.getDifficulty());
+            }
+            catch (Exception ex){
+
+            }
 
             if(mCurrentPhotoPath2 != null) {
                 setPic();

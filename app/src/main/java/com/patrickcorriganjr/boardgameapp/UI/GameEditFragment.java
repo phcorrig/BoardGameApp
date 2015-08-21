@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.patrickcorriganjr.boardgameapp.Data.Game;
@@ -77,6 +78,8 @@ public class GameEditFragment extends Fragment {
     Button submitButton;
     @InjectView(R.id.ratingBarEdit)
     RatingBar ratingBar;
+    @InjectView(R.id.difficultySpinner)
+    Spinner difficultySpinner;
 
     @OnClick (R.id.submitButton)
     void submit(){
@@ -93,7 +96,7 @@ public class GameEditFragment extends Fragment {
                     ratingBar.getRating() + "",//ratingEditText.getText().toString(),
                     timesPlayedEditText.getText().toString(),
                     whenBoughtEditText.getText().toString(),
-                    difficultyEditText.getText().toString());
+                    difficultySpinner.getSelectedItemPosition() + ""); //difficultyEditText.getText().toString());
         }
         else{
             dbHelper.updateEntry("" + ID,
@@ -107,7 +110,7 @@ public class GameEditFragment extends Fragment {
                     ratingBar.getRating() + "",//ratingEditText.getText().toString(),
                     timesPlayedEditText.getText().toString(),
                     whenBoughtEditText.getText().toString(),
-                    difficultyEditText.getText().toString());
+                    difficultySpinner.getSelectedItemPosition() + ""); //difficultyEditText.getText().toString());
         }
         getFragmentManager().popBackStack();
     }
@@ -158,6 +161,7 @@ public class GameEditFragment extends Fragment {
             timesPlayedEditText.setText(mGame.getTimesPlayed() + "");
             whenBoughtEditText.setText(mGame.getWhenBought());
             difficultyEditText.setText(mGame.getDifficulty());
+            difficultySpinner.setSelection(Integer.parseInt(mGame.getDifficulty()));
 
             if(mCurrentPhotoPath2 != null) {
                 setPic();
